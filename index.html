@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو أبو الزين قنجراوي - Abo Alzien</title>
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/8gJzfXZs/IMG-20261118-023758-132.jpg">
+    <!-- QRCode.js Library via CDN for dynamic QR generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #060606;
+            --card-bg: #121212;
+            --card-border: #242424;
+            --gold-primary: #d4af37;
+            --gold-light: #f9e79f;
+            --gold-dark: #997a15;
+            --gold-gradient: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa820a 100%);
+            --text-color: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --danger: #e74c3c;
+            --fb-blue: #1877F2;
+            --fb-blue-light: #4dabf7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mode Switcher Toggle Bar (Upper Bar) */
+        .view-mode-bar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #222;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .mode-toggle-btn {
+            background: #181818;
+            color: var(--gold-light);
+            border: 1px solid var(--gold-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .mode-toggle-btn.active {
+            background: var(--gold-gradient);
+            color: #000;
+            font-weight: bold;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .qr-trigger-btn {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Minimal Header (Compact Brand Bar - Food First) */
+        .minimal-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: linear-gradient(180deg, #121212 0%, #060606 100%);
+        }
+        .header-logo-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1.5px solid var(--gold-primary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+            background-color: #000;
+            flex-shrink: 0;
+        }
+        .header-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.1);
+            display: block;
+        }
+        .header-text-group {
+            text-align: right;
+        }
+        .minimal-title {
+            color: var(--gold-primary);
+            font-size: 1.45rem;
+            font-weight: 900;
+            margin-bottom: 1px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            line-height: 1.2;
+        }
+        .minimal-sub {
+            color: var(--gold-light);
+            font-size: 0.7rem;
+            letter-spacing: 3.5px;
+            opacity: 0.85;
+        }
+
+        /* Visual Banner Categories Bar */
+        .categories-visual-bar {
+            background: #0a0a0a;
+            padding: 15px 10px;
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            border-bottom: 2px solid var(--gold-primary);
+            border-top: 1px solid #1a1a1a;
+            scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+        }
+        .categories-visual-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-card-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+            width: 72px;
+        }
+
+        .cat-card-item:active {
+            transform: scale(0.92);
+        }
+
+        .cat-img-wrapper {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            padding: 2px;
+            background: #141414;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .cat-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .cat-card-title {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .cat-card-item.active .cat-img-wrapper {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 14px rgba(212, 175, 55, 0.6);
+            transform: scale(1.08);
+            background: var(--gold-gradient);
+        }
+
+        .cat-card-item.active .cat-card-title {
+            color: var(--gold-light);
+            font-weight: bold;
+        }
+
+        /* Admin Action Panel */
+        .admin-panel {
+            background: #111;
+            border: 1px dashed var(--gold-primary);
+            margin: 15px auto;
+            padding: 12px;
+            border-radius: 12px;
+            max-width: 650px;
+            width: 92%;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .admin-title {
+            width: 100%;
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .add-btn {
+            background: var(--gold-gradient);
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .reset-btn {
+            background: #222;
+            color: var(--gold-light);
+            border: 1px solid var(--gold-dark);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Section Title */
+        .section-title-container {
+            text-align: center;
+            margin: 20px 0 15px;
+        }
+
+        .section-title {
+            color: var(--gold-primary);
+            font-size: 1.35rem;
+            border-bottom: 2px solid var(--gold-primary);
+            display: inline-block;
+            padding-bottom: 4px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        /* Items List Container */
+        .items-list {
+            padding: 0 12px;
+            max-width: 650px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-grow: 1; /* Pushes footer down */
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-right: 4px solid var(--gold-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            position: relative;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.65);
+            transition: transform 0.2s;
+        }
+
+        .menu-card:active {
+            transform: scale(0.99);
+        }
+
+        .img-box {
+            width: 88px;
+            height: 88px;
+            border-radius: 14px;
+            border: 1.5px solid var(--gold-primary);
+            background: #1a1a1a;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7), 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover .img-box img {
+            transform: scale(1.05);
+        }
+
+        .menu-card-info {
+            flex-grow: 1;
+            padding: 0 14px;
+        }
+
+        .menu-card-title {
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .menu-card-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+
+        .menu-card-price {
+            color: var(--gold-primary);
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        .action-btn.delete {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Beautiful Footer Section */
+        .restaurant-footer {
+            margin-top: 40px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%);
+            border-top: 2px solid var(--gold-primary);
+            padding: 40px 15px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+
+        .footer-logo-wrap {
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            background-color: #000;
+            overflow: hidden;
+            box-shadow: 0 0 24px rgba(212, 175, 55, 0.4);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.1);
+            display: block;
+        }
+
+        .qr-logo-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            background-color: #000;
+            overflow: hidden;
+            margin: 0 auto 10px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.35);
+        }
+
+        .qr-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.1);
+            display: block;
+        }
+
+        .fb-name-link {
+            color: var(--fb-blue-light);
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-decoration: none;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(77, 171, 247, 0.4);
+            transition: color 0.3s;
+        }
+
+        .fb-name-link:hover {
+            color: #74c0fc;
+        }
+
+        .restaurant-sub-footer {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .footer-contact-card {
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .footer-contact-item a {
+            color: var(--gold-light);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            direction: ltr;
+        }
+
+        .fb-social-btn {
+            margin-top: 25px;
+            background: var(--fb-blue);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+            transition: transform 0.2s;
+        }
+        .fb-social-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Modals Overlay (Form & QR) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.88);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--gold-primary);
+            padding: 20px 18px 26px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
+            max-height: 84vh;
+            overflow-y: auto;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #2ecc71, #1e8449);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.82rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            border: 1.5px dashed var(--gold-primary);
+            border-radius: 10px;
+            background: #0b0b0b;
+            padding: 14px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            overflow: hidden;
+        }
+
+        .file-upload-wrapper:active {
+            background: #171717;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-upload-label {
+            color: var(--gold-light);
+            font-size: 0.88rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            pointer-events: none;
+        }
+
+        .file-upload-hint {
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-weight: normal;
+        }
+
+        .upload-status {
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: #2ecc71;
+            text-align: center;
+            min-height: 18px;
+        }
+
+        .upload-preview-wrap {
+            display: none;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .upload-preview-wrap img {
+            width: 96px;
+            height: 96px;
+            border-radius: 12px;
+            border: 1.5px solid var(--gold-primary);
+            object-fit: cover;
+            background: #181818;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+
+        .modal-content h3 {
+            color: var(--gold-primary);
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 1.25rem;
+        }
+
+        .qr-card-box {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 14px;
+            display: inline-block;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        #qrcodeCanvas {
+            display: flex;
+            justify-content: center;
+        }
+
+        .qr-url-text {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            word-break: break-all;
+            margin-top: 8px;
+            direction: ltr;
+        }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--gold-light); font-size: 0.88rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; background: #060606; border: 1px solid #333;
+            color: #fff; border-radius: 8px; font-size: 0.9rem;
+        }
+
+        .image-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+        .tab-btn {
+            flex: 1; background: #1c1c1c; border: 1px solid #333; color: var(--text-muted);
+            padding: 7px; border-radius: 6px; cursor: pointer; font-size: 0.82rem;
+        }
+        .tab-btn.active { background: var(--gold-primary); color: #000; font-weight: bold; }
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+        .modal-actions button {
+            flex: 1; padding: 11px; border-radius: 8px; font-weight: bold;
+            cursor: pointer; border: none; font-size: 0.9rem;
+        }
+        .save-btn { background: var(--gold-gradient); color: #000; }
+        .cancel-btn { background: #282828; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <!-- Mode Switcher & QR Code Bar -->
+    <div class="view-mode-bar">
+        <div style="display:flex; gap:8px;">
+            <button class="mode-toggle-btn active" id="userViewBtn" onclick="setMode('user')">
+                👁️ الزبون
+            </button>
+            <button class="mode-toggle-btn" id="adminViewBtn" onclick="setMode('admin')">
+                🔒 لوحة التحكم
+            </button>
+        </div>
+        <button class="qr-trigger-btn" onclick="openQrModal()">
+            📱 رمز QR
+        </button>
+    </div>
+
+    <!-- Minimal Header (Compact Brand Bar - Food First) -->
+    <header class="minimal-header">
+        <div class="header-logo-wrap">
+            <img src="https://i.ibb.co/8gJzfXZs/IMG-20261118-023758-132.jpg" alt="لوغو مطعم أبو الزين قنجراوي">
+        </div>
+        <div class="header-text-group">
+            <h1 class="minimal-title">أبو الزين قنجراوي</h1>
+            <p class="minimal-sub">LUXURY MENU</p>
+        </div>
+    </header>
+
+    <!-- Visual Categories Bar -->
+    <div class="categories-visual-bar" id="categoriesVisualBar">
+        <!-- Rendered dynamically by JS -->
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminControlPanel" style="display: none;">
+        <div class="admin-title">⚙️ لوحة تحكم مدير المنيو</div>
+        <button class="add-btn" onclick="openAddModal()">+ إضافة صنف جديد</button>
+        <button class="export-btn" onclick="exportUpdatedMenu()">💾 تصدير المنيو بالصور</button>
+        <button class="reset-btn" onclick="resetDefaultMenu()">استعادة المنيو الأصلي</button>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-title-container">
+        <h2 class="section-title" id="currentCategoryTitle">المقبلات</h2>
+    </div>
+
+    <!-- Items List Container -->
+    <div class="items-list" id="itemsContainer">
+        <!-- Rendered dynamically by JS -->
+    </div>
+
+    <!-- Beautiful Footer Section -->
+    <footer class="restaurant-footer">
+        <!-- Logo -->
+        <div class="footer-logo-wrap">
+            <img src="https://i.ibb.co/8gJzfXZs/IMG-20261118-023758-132.jpg" alt="لوغو مطعم أبو الزين قنجراوي">
+        </div>
+        
+        <!-- Name (Clickable Blue Link) -->
+        <a href="https://www.facebook.com/profile.php?id=61571880477272" target="_blank" class="fb-name-link">أبو الزين قنجراوي</a>
+        <p class="restaurant-sub-footer">Abo Alzien</p>
+        
+        <!-- Organized Contact Info -->
+        <div class="footer-contact-card">
+            <div class="footer-contact-item">
+                <svg style="fill: var(--gold-primary); width: 22px; height: 22px; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>اللاذقية - أوتوستراد دمسرخو - مقابل مفرق دمسرخو الرئيسي</span>
+            </div>
+            
+            <div style="width: 100%; height: 1px; background: #2a2a2a; margin: 2px 0;"></div>
+
+            <div class="footer-contact-item">
+                <svg style="fill: #25D366; width: 20px; height: 20px; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <a href="https://wa.me/963937222843">0937 222 843</a>
+            </div>
+
+            <div class="footer-contact-item">
+                <svg style="fill: var(--gold-light); width: 20px; height: 20px; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <a href="tel:0933608705">0933 608 705</a>
+            </div>
+        </div>
+
+        <!-- Facebook Follow Button -->
+        <a href="https://www.facebook.com/profile.php?id=61571880477272" target="_blank" class="fb-social-btn">
+            <svg style="fill: #fff; width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.312h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+            تابعنا على فيسبوك
+        </a>
+    </footer>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">إضافة صنف جديد</h3>
+            <input type="hidden" id="editIndex" value="-1">
+            
+            <div class="form-group">
+                <label>اسم الصنف</label>
+                <input type="text" id="itemName" placeholder="مثال: سلطة فتوش">
+            </div>
+
+            <div class="form-group">
+                <label>الوصف / المكونات (اختياري)</label>
+                <textarea id="itemDesc" rows="2" placeholder="تفاصيل الصنف أو مكونات العرض..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>السعر</label>
+                <input type="text" id="itemPrice" placeholder="مثال: 25 ألف">
+            </div>
+
+            <div class="form-group">
+                <label>القسم</label>
+                <select id="itemCategory">
+                    <option value="المقبلات">1. المقبلات</option>
+                    <option value="المشاريب والأراكيل">2. المشاريب والأراكيل</option>
+                    <option value="السندويشات">3. السندويشات</option>
+                    <option value="الوجبات">4. الوجبات</option>
+                    <option value="المشاوي">5. المشاوي</option>
+                    <option value="العروض">6. العروض</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>طريقة إضافة الصورة</label>
+                <div class="image-tabs">
+                    <button type="button" class="tab-btn active" id="tabUrlBtn" onclick="switchImageTab('url')">رابط URL</button>
+                    <button type="button" class="tab-btn" id="tabFileBtn" onclick="switchImageTab('file')">رفع من الجهاز</button>
+                </div>
+                
+                <div id="urlInputContainer">
+                    <input type="text" id="itemImage" placeholder="ضع رابط الصورة هنا https://..." oninput="previewUrlImage(this.value)">
+                </div>
+                
+                <div id="fileInputContainer" style="display: none;">
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="itemFile" accept="image/*" onchange="encodeImageFileAsURL(this)">
+                        <div class="file-upload-label">
+                            <span>📁 اضغط هنا لاختيار صورة من جهازك</span>
+                            <span class="file-upload-hint">يتم ضغط الصورة تلقائياً لحفظ المساحة وسرعة التحميل</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-status" id="uploadStatus"></div>
+                <div class="upload-preview-wrap" id="uploadPreviewWrap">
+                    <img id="uploadPreviewImg" src="" alt="معاينة الصورة">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="save-btn" onclick="saveItem()">حفظ</button>
+                <button class="cancel-btn" onclick="closeModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content" style="text-align: center;">
+            <div class="qr-logo-wrap">
+                <img src="https://i.ibb.co/8gJzfXZs/IMG-20261118-023758-132.jpg" alt="لوغو مطعم أبو الزين قنجراوي">
+            </div>
+            <h3 style="color:var(--gold-primary); margin-bottom:8px;">رمز QR الخـاص بالمنيو</h3>
+            <p style="color:var(--text-muted); font-size:0.85rem;">يمكنك طباعة هذا الرمز أو مسحه بهاتفك لمشاركة المنيو مباشرة مع الزبائن</p>
+
+            <div class="qr-card-box">
+                <div id="qrcodeCanvas"></div>
+            </div>
+
+            <div class="qr-url-text" id="currentUrlDisplay">https://...</div>
+
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="save-btn" onclick="copyCurrentUrl()">📋 نسخ الرابط</button>
+                <button class="cancel-btn" onclick="closeQrModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "1234";
+
+        const categoriesConfig = [
+            { name: "المقبلات", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=150&q=80" },
+            { name: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&q=80" },
+            { name: "السندويشات", image: "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=150&q=80" },
+            { name: "الوجبات", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=150&q=80" },
+            { name: "المشاوي", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=150&q=80" },
+            { name: "العروض", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=150&q=80" }
+        ];
+
+        /* __MENU_DATA_START__ */
+        const defaultData = [
+            // 1. المقبلات
+            { name: "بطاطا مقلية (وسط)", desc: "", price: "20 ألف", category: "المقبلات", image: "https://i.ibb.co/yFN3M6wH/IMG-20261118-023751-344.jpg" },
+            { name: "بطاطا مقلية (كبير)", desc: "", price: "30 ألف", category: "المقبلات", image: "https://i.ibb.co/yFN3M6wH/IMG-20261118-023751-344.jpg" },
+            { name: "كريم ثوم", desc: "", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/xKfCdD7W/IMG-20261125-211707-415.jpg" },
+            { name: "كاتشب", desc: "صوص كاتشب", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/xKt4jGfG/1795639560115.jpg" },
+            { name: "كول سلو", desc: "", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/mF9gv7bZ/IMG-20261125-211722-486.jpg" },
+            { name: "محمرة بالخبز", desc: "", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/CpFkpNG4/IMG-20261125-211719-111.jpg" },
+            { name: "مخللات", desc: "", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/NQWsQyT/IMG-20261125-WA0186.jpg" },
+            { name: "سلطة خضار موسمية", desc: "", price: "25 ألف", category: "المقبلات", image: "https://i.ibb.co/PGjjSQqf/IMG-20261125-211758-858.jpg" },
+            { name: "سلطة سيزر", desc: "", price: "25 ألف", category: "المقبلات", image: "https://i.ibb.co/KxMkt37f/IMG-20261125-211727-100.jpg" },
+            { name: "سلطة التونة", desc: "", price: "50 ألف", category: "المقبلات", image: "https://i.ibb.co/4wJkPxjK/IMG-20261125-211924-373.jpg" },
+            { name: "فتوش", desc: "", price: "25 ألف", category: "المقبلات", image: "https://i.ibb.co/rGyvqb3j/IMG-20261125-211711-370.jpg" },
+            { name: "صوص كوكتيل", desc: "", price: "5 ألف", category: "المقبلات", image: "https://i.ibb.co/5x8xC2gj/IMG-20261125-211829-056.jpg" },
+            { name: "خضار مشوية", desc: "", price: "10 ألف", category: "المقبلات", image: "https://i.ibb.co/B2gLzDBP/IMG-20261118-023741-924.jpg" },
+            { name: "حمص ناعم", desc: "", price: "20 ألف", category: "المقبلات", image: "https://i.ibb.co/pjgjK8SY/images-3.jpg" },
+
+            // 2. المشاريب والأراكيل
+            { name: "قهوة غلي", desc: "", price: "15 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&q=80" },
+            { name: "شاي", desc: "", price: "10 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300&q=80" },
+            { name: "شاي اخضر", desc: "", price: "10 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?w=300&q=80" },
+            { name: "ميلو", desc: "", price: "13 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300&q=80" },
+            { name: "كابوتشينو", desc: "", price: "13 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=300&q=80" },
+            { name: "نسكافيه", desc: "", price: "13 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300&q=80" },
+            { name: "3 ب 1", desc: "", price: "13 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=300&q=80" },
+            { name: "2 ب 1", desc: "", price: "13 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&q=80" },
+            { name: "زهورات شامية", desc: "", price: "10 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=300&q=80" },
+            { name: "بابونج", desc: "", price: "10 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=300&q=80" },
+            { name: "كمون وليمون", desc: "", price: "10 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300&q=80" },
+            { name: "عصير برتقال فريش", desc: "", price: "23 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=300&q=80" },
+            { name: "بولو", desc: "ليمون ونعنع طازج", price: "20 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=300&q=80" },
+            { name: "ليموناضة", desc: "", price: "18 ألف", category: "المشاريب والأراكيل", image: "https://images.unsplash.com/photo-1523371054106-bbf80586c38c?w=300&q=80" },
+            { name: "أرجيلة تفاحتين", desc: "", price: "23 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZTc0YzNjIiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYzAzOTJiIiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiNjMDM5MmIiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMzkyYiIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iI2MwMzkyYiIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+            { name: "أرجيلة فاخر", desc: "", price: "23 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjFjNDBmIiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZDRhZjM3IiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiNkNGFmMzciIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q0YWYzNyIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iI2Q0YWYzNyIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+            { name: "أرجيلة بولو", desc: "", price: "20 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmVjYzcxIiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMjdhZTYwIiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiMyN2FlNjAiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI3YWU2MCIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iIzI3YWU2MCIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+            { name: "أرجيلة لوف", desc: "", price: "20 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmQ3OWE4IiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZTg0MzkzIiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiNlODQzOTMiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U4NDM5MyIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iI2U4NDM5MyIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+            { name: "أرجيلة نعنع", desc: "", price: "20 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNTVlZmM0IiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDBiODk0IiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiMwMGI4OTQiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwYjg5NCIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iIzAwYjg5NCIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+            { name: "أرجيلة علكة", desc: "", price: "20 ألف", category: "المشاريب والأراكيل", image: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNTIlIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNzRiOWZmIiBzdG9wLW9wYWNpdHk9IjAuMzgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1NSUiIHN0b3AtY29sb3I9IiMxNDExMGIiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNzA3MDciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZmYwYjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiNkNGFmMzciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOGM2YTA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbGFzcyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDk4NGUzIiBzdG9wLW9wYWNpdHk9IjAuNzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiIHN0b3AtY29sb3I9IiMwOTg0ZTMiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjcwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjIyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzA5ODRlMyIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImVtYmVyIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmNGI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iNDUlIiBzdG9wLWNvbG9yPSIjZmY2YTAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2MwMjAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzbW9rZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEx1eHVyeSBEYXJrIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gU3VidGxlIFNtb2tlIFdpc3BzIC0tPgogIDxwYXRoIGQ9Ik0xMDAgNDQgQzkwIDM0LCAxMTIgMjQsIDk2IDEyIEM4OCA2LCA5OCAyLCAxMDQgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3Ntb2tlKSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTA2IDQ2IEMxMTggMzYsIDEwMiAyMiwgMTE4IDEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTk0IDQ2IEM4MiAzNiwgOTQgMjQsIDgwIDE0IiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjc21va2UpIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CgogIDwhLS0gR2xvd2luZyBDaGFyY29hbCBFbWJlciAtLT4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNDYiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9InVybCgjZW1iZXIpIi8+CiAgPHJlY3QgeD0iOTMiIHk9IjQyIiB3aWR0aD0iNiIgaGVpZ2h0PSI1IiByeD0iMS41IiBmaWxsPSIjZmY3YjAwIiBzdHJva2U9IiNmZmQyN2QiIHN0cm9rZS13aWR0aD0iMC42Ii8+CiAgPHJlY3QgeD0iMTAxIiB5PSI0MyIgd2lkdGg9IjYiIGhlaWdodD0iNSIgcng9IjEuNSIgZmlsbD0iI2ZmNTUwMCIgc3Ryb2tlPSIjZmZkMjdkIiBzdHJva2Utd2lkdGg9IjAuNiIvPgoKICA8IS0tIEhvb2thaCBCb3dsIChIZWFkKSAtLT4KICA8cGF0aCBkPSJNODggNDggTDExMiA0OCBMMTA3IDYwIEw5MyA2MCBaIiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPCEtLSBBc2ggVHJheSAtLT4KICA8cGF0aCBkPSJNNzYgNjIgUTEwMCA2OCAxMjQgNjIgTDEyMCA2NiBRMTAwIDcxIDgwIDY2IFoiIGZpbGw9InVybCgjZ29sZCkiLz4KCiAgPCEtLSBEZWNvcmF0aXZlIFN0ZW0gLS0+CiAgPHJlY3QgeD0iOTYuNSIgeT0iNjYiIHdpZHRoPSI3IiBoZWlnaHQ9IjQ2IiByeD0iMiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3NyIgcng9IjciIHJ5PSIzLjUiIGZpbGw9InVybCgjZ29sZCkiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iOTIiIHJ4PSI2IiByeT0iMyIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMDgiIHJ4PSI5IiByeT0iNCIgZmlsbD0idXJsKCNnb2xkKSIvPgoKICA8IS0tIEhvb2thaCBIb3NlIC0tPgogIDxwYXRoIGQ9Ik0xMDcgMTA5IEMxMzggMTEyLCAxNTIgMTM1LCAxMzggMTU4IEMxMjYgMTc2LCAxNTQgMTc2LCAxNjIgMTQyIEMxNjYgMTI1LCAxNjIgMTEwLCAxNTQgMTAyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnb2xkKSIgc3Ryb2tlLXdpZHRoPSI0LjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gTW91dGhwaWVjZSAtLT4KICA8bGluZSB4MT0iMTU0IiB5MT0iMTAyIiB4Mj0iMTQ2IiB5Mj0iODgiIHN0cm9rZT0iI2Y5ZTc5ZiIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgoKICA8IS0tIEdsYXNzIEJhc2UgKFZhc2UpIC0tPgogIDxwYXRoIGQ9Ik05MCAxMTIgTDExMCAxMTIgQzExMyAxMjUsIDEyOCAxNDIsIDEyOCAxNjAgQzEyOCAxNzUsIDExOCAxODIsIDEwMCAxODIgQzgyIDE4MiwgNzIgMTc1LCA3MiAxNjAgQzcyIDE0MiwgODcgMTI1LCA5MCAxMTIgWiIKICAgICAgICBmaWxsPSJ1cmwoI2dsYXNzKSIgc3Ryb2tlPSJ1cmwoI2dvbGQpIiBzdHJva2Utd2lkdGg9IjIiLz4KCiAgPCEtLSBMaXF1aWQgTGV2ZWwgaW5zaWRlIEJhc2UgLS0+CiAgPHBhdGggZD0iTTc0IDE1NiBRMTAwIDE2MiAxMjYgMTU2IEMxMjcgMTczLCAxMTcgMTgwLCAxMDAgMTgwIEM4MyAxODAsIDczIDE3MywgNzQgMTU2IFoiCiAgICAgICAgZmlsbD0iIzA5ODRlMyIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gR2xhc3MgSGlnaGxpZ2h0IC0tPgogIDxwYXRoIGQ9Ik04NCAxMjggQzgwIDE0MCwgNzggMTUyLCA4MSAxNjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCiAgPCEtLSBCb3R0b20gQmFzZSBSaW5nIC0tPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxODIiIHJ4PSIyMiIgcnk9IjMiIGZpbGw9InVybCgjZ29sZCkiIG9wYWNpdHk9IjAuODUiLz4KPC9zdmc+" },
+
+            // 3. السندويشات
+            { name: "سندويشة شاورما", desc: "", price: "20 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=300&q=80" },
+            { name: "سندويشة شاورما دبل", desc: "", price: "30 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&q=80" },
+            { name: "سندويشة شاورما سبيسيال", desc: "", price: "40 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&q=80" },
+            { name: "سندويشة شيش", desc: "", price: "25 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=300&q=80" },
+            { name: "سندويشة شيش سبيسيال", desc: "", price: "45 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&q=80" },
+            { name: "سندويشة فروج", desc: "", price: "25 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=300&q=80" },
+            { name: "سندويشة بطاطا", desc: "", price: "10 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&q=80" },
+            { name: "سندويشة بطاطا دبل", desc: "", price: "15 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=300&q=80" },
+            { name: "سندويشة كباب", desc: "", price: "25 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=300&q=80" },
+            { name: "سندويشة كباب دبل", desc: "", price: "35 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&q=80" },
+            { name: "سندويشة كريسبي", desc: "", price: "35 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=300&q=80" },
+            { name: "سندويشة زنجر", desc: "", price: "45 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=300&q=80" },
+            { name: "سندويشة اسكالوب", desc: "", price: "35 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f6?w=300&q=80" },
+            { name: "سندويشة سوبريم", desc: "", price: "45 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&q=80" },
+            { name: "برغر دجاج", desc: "", price: "30 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80" },
+            { name: "تشيز برغر دجاج", desc: "", price: "35 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=300&q=80" },
+            { name: "سندويشة تويستر", desc: "", price: "40 ألف", category: "السندويشات", image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=300&q=80" },
+
+            // 4. الوجبات
+            { name: "وجبة شاورما دبل", desc: "", price: "65 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=300&q=80" },
+            { name: "وجبة شاورما سبيسيال", desc: "", price: "60 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&q=80" },
+            { name: "وجبة كريسبي", desc: "", price: "65 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=300&q=80" },
+            { name: "وجبة زنجر", desc: "", price: "85 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=300&q=80" },
+            { name: "وجبة اسكالوب", desc: "", price: "65 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f6?w=300&q=80" },
+            { name: "وجبة سوبريم", desc: "", price: "85 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&q=80" },
+            { name: "وجبة شيش", desc: "", price: "65 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=300&q=80" },
+            { name: "وجبة فخد عالفحم", desc: "", price: "35 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=300&q=80" },
+            { name: "وجبة بروستد (فروج كامل)", desc: "", price: "125 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&q=80" },
+            { name: "وجبة بروستد (نصف فروج)", desc: "", price: "65 ألف", category: "الوجبات", image: "https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=300&q=80" },
+
+            // 5. المشاوي
+            { name: "فروج مشوي عالفحم", desc: "", price: "135 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=300&q=80" },
+            { name: "فروج مشوي على السيخ", desc: "", price: "125 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&q=80" },
+            { name: "فخاد (كيلو)", desc: "", price: "60 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=300&q=80" },
+            { name: "جوانح (كيلو)", desc: "", price: "60 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=300&q=80" },
+            { name: "شيش (كيلو)", desc: "", price: "135 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=300&q=80" },
+            { name: "كباب فروج (كيلو)", desc: "", price: "85 ألف", category: "المشاوي", image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=300&q=80" },
+            { name: "مارينا (كيلو)", desc: "", price: "85 ألف", category: "المشاوي", image: "https://i.ibb.co/GQKvT81L/IMG-20261125-211905-535.jpg" },
+
+            // 6. العروض
+            { name: "عرض العائلة", desc: "فروج على (السيخ أو فحم أو بروستد) + نصف كيلو شاورما + نصف كيلو ثوم + صحن بطاطا كبير + صحن مخللات + لتر كولا", price: "165 ألف", category: "العروض", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&q=80" },
+            { name: "عرض الجامبو", desc: "5 قطع كريسبي + 5 قطع اسكالوب + 5 خراطيش شاورما + بطاطا مقلية + 2 علبة كريم ثوم + كول سلو + صوص كوكتيل + صحن مخللات + لتر كولا", price: "150 ألف", category: "العروض", image: "https://i.ibb.co/h1XWy1H0/IMG-20261125-211916-613.jpg" },
+            { name: "عرض الميكس", desc: "كيلو فخاد + كيلو جوانح + نصف كيلو شيش", price: "155 ألف", category: "العروض", image: "https://i.ibb.co/HLhP2kq8/IMG-20261125-211803-561.jpg" },
+            { name: "عرض التشيكن فور يو", desc: "15 قطعة كريسبي + صحن بطاطا + 3 علب كريم ثوم + صحن مخللات + صوص كوكتيل + كول سلو + لتر كولا", price: "155 ألف", category: "العروض", image: "https://i.ibb.co/LDvvDYDh/IMG-20261125-211755-463.jpg" },
+            { name: "عرض التربل", desc: "15 قطعة كريسبي + صحن بطاطا + 3 علب كريم ثوم + صحن مخللات + صوص كوكتيل + كول سلو + لتر كولا", price: "155 ألف", category: "العروض", image: "https://i.ibb.co/60TC60st/IMG-20261125-211927-212.jpg" },
+            { name: "عرض وجبة الغولدن", desc: "سندويشة شاورما + بطاطا + قطعة كريسبي + مخللات + كريم ثوم + كولا أو عيران", price: "35 ألف", category: "العروض", image: "https://i.ibb.co/cSybT1FH/IMG-20261125-211738-878.jpg" }
+        ];
+
+        /* __MENU_DATA_END__ */
+
+        /* __CACHE_KEY_START__ */
+        const STORAGE_KEY = 'luxuryMenuData_v15';
+        /* __CACHE_KEY_END__ */
+
+        let menuData = (() => {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
+            } catch (e) {
+                return JSON.parse(JSON.stringify(defaultData));
+            }
+        })();
+        let currentCategory = "المقبلات";
+        let currentMode = "user"; 
+        let tempImageBase64 = "";
+        let currentImageMode = "url";
+        let isProcessingImage = false;
+        let qrcodeObj = null;
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(menuData));
+                return true;
+            } catch (e) {
+                alert("⚠️ امتلاء مساحة التخزين المؤقت في المتصفح! اضغط على زر (💾 تصدير المنيو بالصور) لحفظ نسخة دائمة أو استخدم روابط صور خارجية.");
+                return false;
+            }
+        }
+
+        function setMode(mode) {
+            if (mode === 'admin') {
+                const pass = prompt("يرجى إدخال كلمة السر للدخول إلى لوحة التحكم:");
+                if (pass === ADMIN_PASSWORD) {
+                    currentMode = 'admin';
+                    document.getElementById('adminViewBtn').classList.add('active');
+                    document.getElementById('userViewBtn').classList.remove('active');
+                    document.getElementById('adminControlPanel').style.display = 'flex';
+                } else if (pass !== null) {
+                    alert("كلمة السر غير صحيحة! لا يمكنك الوصول إلى لوحة التحكم.");
+                    return;
+                } else {
+                    return;
+                }
+            } else {
+                currentMode = 'user';
+                document.getElementById('userViewBtn').classList.add('active');
+                document.getElementById('adminViewBtn').classList.remove('active');
+                document.getElementById('adminControlPanel').style.display = 'none';
+            }
+            renderItems();
+        }
+
+        function resetDefaultMenu() {
+            if (confirm("هل تريد إعادة ضبط المنيو واسترجاع الأصناف والأسعار الافتراضية؟")) {
+                menuData = JSON.parse(JSON.stringify(defaultData));
+                saveData();
+                renderCategoriesVisualBar();
+                renderItems();
+            }
+        }
+
+        function renderCategoriesVisualBar() {
+            const container = document.getElementById('categoriesVisualBar');
+            container.innerHTML = '';
+            
+            categoriesConfig.forEach(cat => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `cat-card-item ${cat.name === currentCategory ? 'active' : ''}`;
+                
+                itemDiv.innerHTML = `
+                    <div class="cat-img-wrapper">
+                        <img src="${cat.image}" alt="${cat.name}">
+                    </div>
+                    <div class="cat-card-title">${cat.name}</div>
+                `;
+
+                itemDiv.onclick = () => {
+                    currentCategory = cat.name;
+                    document.getElementById('currentCategoryTitle').innerText = cat.name;
+                    renderCategoriesVisualBar();
+                    renderItems();
+                };
+
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+            
+            const filteredItems = menuData.map((item, index) => ({...item, originalIndex: index}))
+                                          .filter(item => item.category === currentCategory);
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#777; margin-top:30px; font-size:1.05rem;">لا توجد أصناف في هذا القسم حالياً</p>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                
+                let actionsHtml = '';
+                if (currentMode === 'admin') {
+                    actionsHtml = `
+                        <div class="card-actions">
+                            <button class="action-btn" onclick="openEditModal(${item.originalIndex})">تعديل / صورة</button>
+                            <button class="action-btn delete" onclick="deleteItem(${item.originalIndex})">حذف</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="img-box">
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1546549032-9571cd6b27df'}" alt="${item.name}">
+                    </div>
+                    <div class="menu-card-info">
+                        <div class="menu-card-title">${item.name}</div>
+                        ${item.desc ? `<div class="menu-card-desc">${item.desc}</div>` : ''}
+                        <div class="menu-card-price">${item.price}</div>
+                    </div>
+                    ${actionsHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* QR Modal Logic */
+        function openQrModal() {
+            const currentUrl = window.location.href;
+            document.getElementById('currentUrlDisplay').innerText = currentUrl;
+            
+            const qrContainer = document.getElementById('qrcodeCanvas');
+            qrContainer.innerHTML = '';
+
+            qrcodeObj = new QRCode(qrContainer, {
+                text: currentUrl,
+                width: 160,
+                height: 160,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        function copyCurrentUrl() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                alert("تم نسخ رابط المنيو بنجاح! يمكنك الآن إرساله للزبائن.");
+            }).catch(() => {
+                alert("الرابط: " + currentUrl);
+            });
+        }
+
+        /* Modal Image Switcher Tabs */
+        function switchImageTab(mode) {
+            currentImageMode = mode;
+            if (mode === 'url') {
+                document.getElementById('tabUrlBtn').classList.add('active');
+                document.getElementById('tabFileBtn').classList.remove('active');
+                document.getElementById('urlInputContainer').style.display = 'block';
+                document.getElementById('fileInputContainer').style.display = 'none';
+                previewUrlImage(document.getElementById('itemImage').value.trim());
+            } else {
+                document.getElementById('tabFileBtn').classList.add('active');
+                document.getElementById('tabUrlBtn').classList.remove('active');
+                document.getElementById('urlInputContainer').style.display = 'none';
+                document.getElementById('fileInputContainer').style.display = 'block';
+                if (tempImageBase64) {
+                    showImagePreview(tempImageBase64);
+                }
+            }
+        }
+
+        function showImagePreview(src) {
+            const wrap = document.getElementById('uploadPreviewWrap');
+            const img = document.getElementById('uploadPreviewImg');
+            if (src) {
+                img.src = src;
+                wrap.style.display = 'flex';
+            } else {
+                img.src = '';
+                wrap.style.display = 'none';
+            }
+        }
+
+        function previewUrlImage(url) {
+            const cleanUrl = (url || '').trim();
+            document.getElementById('uploadStatus').innerText = '';
+            showImagePreview(cleanUrl);
+        }
+
+        function encodeImageFileAsURL(element) {
+            const file = element.files && element.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.style.color = 'var(--gold-light)';
+            statusEl.innerText = '⏳ جاري تجهيز وضغط الصورة...';
+            isProcessingImage = true;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rawDataUrl = e.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    try {
+                        const MAX_SIZE = 450;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_SIZE) {
+                                height = Math.round((height * MAX_SIZE) / width);
+                                width = MAX_SIZE;
+                            }
+                        } else {
+                            if (height > MAX_SIZE) {
+                                width = Math.round((width * MAX_SIZE) / height);
+                                height = MAX_SIZE;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        tempImageBase64 = canvas.toDataURL('image/jpeg', 0.78);
+                        const kbSize = Math.round((tempImageBase64.length * 3) / 4 / 1024);
+                        statusEl.style.color = '#2ecc71';
+                        statusEl.innerText = `✓ تم تجهيز الصورة بنجاح (${kbSize} KB)`;
+                        showImagePreview(tempImageBase64);
+                    } catch (err) {
+                        tempImageBase64 = rawDataUrl;
+                        statusEl.style.color = '#2ecc71';
+                        statusEl.innerText = '✓ تم تحميل الصورة بنجاح';
+                        showImagePreview(tempImageBase64);
+                    }
+                    isProcessingImage = false;
+                };
+                img.onerror = function() {
+                    tempImageBase64 = rawDataUrl;
+                    statusEl.style.color = '#2ecc71';
+                    statusEl.innerText = '✓ تم تحميل الصورة';
+                    showImagePreview(tempImageBase64);
+                    isProcessingImage = false;
+                };
+                img.src = rawDataUrl;
+            };
+            reader.onerror = function() {
+                statusEl.style.color = 'var(--danger)';
+                statusEl.innerText = '❌ تعذر قراءة الصورة، جرب فتح الملف بمتصفح Chrome';
+                isProcessingImage = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = "إضافة صنف جديد";
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('itemName').value = "";
+            document.getElementById('itemDesc').value = "";
+            document.getElementById('itemPrice').value = "";
+            document.getElementById('itemCategory').value = currentCategory;
+            document.getElementById('itemImage').value = "";
+            document.getElementById('itemFile').value = "";
+            document.getElementById('uploadStatus').innerText = "";
+            tempImageBase64 = "";
+            isProcessingImage = false;
+            showImagePreview("");
+            switchImageTab('file');
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+
+        function openEditModal(index) {
+            const item = menuData[index];
+            document.getElementById('modalTitle').innerText = "تعديل الصنف / إضافة صورة";
+            document.getElementById('editIndex').value = index;
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemDesc').value = item.desc || "";
+            document.getElementById('itemPrice').value = item.price;
+            document.getElementById('itemCategory').value = item.category;
+            document.getElementById('itemFile').value = "";
+            document.getElementById('uploadStatus').innerText = "";
+            isProcessingImage = false;
+            
+            if (item.image && item.image.startsWith('data:image')) {
+                tempImageBase64 = item.image;
+                document.getElementById('itemImage').value = "";
+                switchImageTab('file');
+                showImagePreview(item.image);
+            } else {
+                document.getElementById('itemImage').value = item.image || "";
+                tempImageBase64 = "";
+                switchImageTab('url');
+                showImagePreview(item.image || "");
+            }
+            
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('itemModal').style.display = 'none';
+        }
+
+        function saveItem() {
+            if (isProcessingImage) {
+                alert("انتظر ثانية واحدة حتى ينتهي ضغط الصورة...");
+                return;
+            }
+
+            const index = parseInt(document.getElementById('editIndex').value);
+            const name = document.getElementById('itemName').value.trim();
+            const desc = document.getElementById('itemDesc').value.trim();
+            const price = document.getElementById('itemPrice').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            
+            let image = "";
+            if (currentImageMode === 'file' && tempImageBase64 !== "") {
+                image = tempImageBase64;
+            } else if (currentImageMode === 'url') {
+                image = document.getElementById('itemImage').value.trim();
+            } else if (index !== -1 && menuData[index] && menuData[index].image) {
+                image = menuData[index].image;
+            }
+
+            if (!name) {
+                alert("يرجى إدخال اسم الصنف على الأقل!");
+                return;
+            }
+
+            const itemData = { name, desc, price, category, image };
+
+            if (index === -1) {
+                menuData.push(itemData);
+            } else {
+                menuData[index] = itemData;
+            }
+
+            if (!saveData()) return;
+            closeModal();
+            currentCategory = category;
+            document.getElementById('currentCategoryTitle').innerText = category;
+            renderCategoriesVisualBar();
+            renderItems();
+        }
+
+        /* Export Standalone HTML with all edited items & embedded photos */
+        function exportUpdatedMenu() {
+            try {
+                const clone = document.documentElement.cloneNode(true);
+
+                // Reset dynamic DOM states for clean standalone startup
+                const itemsBox = clone.querySelector('#itemsContainer');
+                if (itemsBox) itemsBox.innerHTML = '';
+                const catsBox = clone.querySelector('#categoriesVisualBar');
+                if (catsBox) catsBox.innerHTML = '';
+                const adminPanel = clone.querySelector('#adminControlPanel');
+                if (adminPanel) adminPanel.style.display = 'none';
+                const userBtn = clone.querySelector('#userViewBtn');
+                if (userBtn) userBtn.classList.add('active');
+                const adminBtn = clone.querySelector('#adminViewBtn');
+                if (adminBtn) adminBtn.classList.remove('active');
+                const itemModal = clone.querySelector('#itemModal');
+                if (itemModal) itemModal.style.display = 'none';
+                const qrModal = clone.querySelector('#qrModal');
+                if (qrModal) qrModal.style.display = 'none';
+                const catTitle = clone.querySelector('#currentCategoryTitle');
+                if (catTitle) catTitle.innerText = 'المقبلات';
+
+                let exportedHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+                const serializedData = JSON.stringify(menuData, null, 12).replace(/<\/script>/gi, '<\\/script>');
+                const newCacheKey = 'luxuryMenuData_' + Date.now();
+
+                const dStart = '/*' + ' __MENU_DATA_START__ ' + '*/';
+                const dEnd = '/*' + ' __MENU_DATA_END__ ' + '*/';
+                const cStart = '/*' + ' __CACHE_KEY_START__ ' + '*/';
+                const cEnd = '/*' + ' __CACHE_KEY_END__ ' + '*/';
+
+                const dIdx1 = exportedHtml.indexOf(dStart);
+                const dIdx2 = exportedHtml.indexOf(dEnd);
+                if (dIdx1 !== -1 && dIdx2 !== -1) {
+                    exportedHtml = exportedHtml.slice(0, dIdx1)
+                        + dStart + '\n        const defaultData = ' + serializedData + ';\n        ' + dEnd
+                        + exportedHtml.slice(dIdx2 + dEnd.length);
+                }
+
+                const cIdx1 = exportedHtml.indexOf(cStart);
+                const cIdx2 = exportedHtml.indexOf(cEnd);
+                if (cIdx1 !== -1 && cIdx2 !== -1) {
+                    exportedHtml = exportedHtml.slice(0, cIdx1)
+                        + cStart + "\n        const STORAGE_KEY = '" + newCacheKey + "';\n        " + cEnd
+                        + exportedHtml.slice(cIdx2 + cEnd.length);
+                }
+
+                const blob = new Blob([exportedHtml], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Abo_Alzien_Menu_Ready.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert("✅ تم تصدير نسخة المنيو الجديدة مع كل الصور والتعديلات بنجاح! (Abo_Alzien_Menu_Ready.html)");
+            } catch (err) {
+                alert("حدث خطأ أثناء التصدير: " + err.message);
+            }
+        }
+
+        function deleteItem(index) {
+            if (confirm("هل أنت متأكد من حذف هذا الصنف؟")) {
+                menuData.splice(index, 1);
+                saveData();
+                renderItems();
+            }
+        }
+
+        // Initial Load
+        renderCategoriesVisualBar();
+        renderItems();
+    </script>
+</body>
+</html>
